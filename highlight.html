@@ -59,11 +59,19 @@
                 }
                 codeBlock.textContent = data.content;
                 if ('language' in data) {
-                    codeBlock.classList.add(`code-${data.language}`);
+                    codeBlock.classList.add(`code-${escapeHTML(data.language)}`);
                 }
                 if ('wrap' in data && data.wrap) {
                     codeBlock.classList.add('code-wrap');
                 }
+                var style = '';
+                if ('font' in data) {
+                    style += `font-family:${escapeHTML(data.font)};`;
+                }
+                if ('fontSize' in data) {
+                    style += `font-size:${escapeHTML(data.fontSize)};`;
+                }
+                codeBlock.setAttribute('style', style);
                 SyntaxHighlighter.highlight(codeBlock);
             }
         </script>
