@@ -1,0 +1,71 @@
+<!-- The source html file with original elements and JavaScript is Copyright (C) Ethan Uppal 2022. All rights reserved. -->
+<!-- Data passed to this page may be under another's copyright. No claim is made over such data. -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Syntax Highlighter</title>
+        <link rel="stylesheet" href="https://ethanuppal.github.io/cdn/lib/syntax.css">
+        <script src="https://ethanuppal.github.io/cdn/lib/syntax.js"></script>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            #code-block {
+                max-width: calc(100% - 10px);
+                max-height: calc(100% - 10px);
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <noscript>
+            <p>JavaScript is disabled in your browser. To display properly, this iframe needs JavaScript. You can view its source code <a href="https://github.com/ethanuppal/api/blob/main/highlight.html">here</a>.</p>
+        </noscript>
+        <pre id="code-block" class="code" style="display: none;"></pre>
+        <script>
+            const codeBlock = document.getElementById('code-block');
+
+            // https://stackoverflow.com/questions/3043775/how-to-escape-html
+            function escapeHTML(str){
+                return new Option(str).innerHTML;
+            }
+
+            // https://stackoverflow.com/questions/25098021/securityerror-blocked-a-frame-with-origin-from-accessing-a-cross-origin-frame
+            window.addEventListener('message', event => {
+                const params = new URLSearchParams(document.location.search);
+                const origin = params.get('origin');
+                if (origin && event.origin != origin) {
+                    return showError(`Origin was given as <strong>${escapeHTML(origin)}</strong> but actual origin was <strong>${escapeHTML(event.origin)}</strong>.`);
+                }
+                codeBlock.style.display = 'block';
+                syntaxHighlight(event.data);
+            }, true);
+
+            function showError(message) {
+                const p = document.createElement('p');
+                p.innerHTML = `An error occured: ${message}`;
+                document.getElementsByTagName('body')[0].appendChild(p);
+            }
+            function syntaxHighlight(data) {
+                if (!('content' in data)) {
+                    return showError('No content passed to frame to syntax highlight.');
+                }
+                codeBlock.textContent = data.content;
+                if ('language' in data) {
+                    codeBlock.classList.add(`code-${data.language}`);
+                }
+                if ('wrap' in data && data.wrap) {
+                    codeBlock.classList.add('code-wrap');
+                }
+                SyntaxHighlighter.highlight(codeBlock);
+            }
+        </script>
+    </body>
+</html>
