@@ -1,0 +1,34 @@
+<!-- Copyright (C) Ethan Uppal 2022. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://ethanuppal.github.io/style.css">
+        <title>Ethan Uppal's API Site</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>API Page</h1>
+            <noscript>
+                <p>Hello there! It looks like you might be lost. <a href="https://ethanuppal.github.io">Here's a link to the main page.</a></p>
+            </noscript>
+            <p id="message"></p>
+            <script>
+                const params = new URLSearchParams(document.location.search);
+                const url = params.get('url');
+                const p = document.getElementById('message');
+                if (url) {
+                    p.innerHTML = `Hello there! You were sent here because you went to an API page that was confused about what to do with you (${url}).`
+                } else {
+                    p.innerHTML = `Hello there! It looks like you might be lost.`;
+                }
+                p.innerHTML += ` <a href="https://ethanuppal.github.io">Here's a link to the main page.</a>`;
+            </script>
+            <p>List of APIs:</p>
+            <ul>
+                <li>https://ethanuppal.github.io/api/highlight.html</li>
+            </ul>
+        </div>
+    </body>
+</html>
